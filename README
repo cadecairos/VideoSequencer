@@ -1,0 +1,12 @@
+VideoSequencer v.0.1
+
+Author: Christopher DeCairos
+
+Description: VideoSequencer is a Javascript library that provides methods for developers to seamlessly sequence videos on after another.
+
+Methods:
+play()
+pause()
+add()
+seek()
+switch()
