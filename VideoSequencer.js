@@ -7,10 +7,10 @@
 var VideoSequencer = function() {
   
   /* Length of all segments */
-  var duration = 0;
+  this.duration = 0;
   
   /* Current Time */
-  var currentTime = 0;
+  this.currentTime = 0;
 
   /* video objects */`
   var segments = [];
@@ -31,8 +31,12 @@ var VideoSequencer = function() {
     
   };
     
+  
+  /*
+  ** Not sure how this can be made private
+  */
   this.seek = function () {
-    
+   
   };
   
 };
