@@ -4,7 +4,9 @@
 ** Date: October 15, 2007
 */
 
-var VideoSequencer = function() {
+(function() {
+  
+  var VideoSequencer = this.VideoSequencer = {};
   
   /* Length of all segments */
   this.duration = 0;
@@ -31,12 +33,8 @@ var VideoSequencer = function() {
     
   };
     
-  
-  /*
-  ** Not sure how this can be made private
-  */
-  this.seek = function () {
+  var seek = function () {
    
   };
   
-};
+}());
