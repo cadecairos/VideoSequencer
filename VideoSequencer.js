@@ -1,7 +1,7 @@
 /* 
 ** VideoSequencer.js
 ** Created by: Christopher Decairos
-** Date: October 15, 2007
+** Date: October 15, 2010
 */
 
 (function() {
