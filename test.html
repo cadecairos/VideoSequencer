@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test page</title>
+    <script src="VideoSequencer.js"></script>
+</head>
+<body>
+    <div>
+        <div>
+            <video style="display: none" src="videos/tiger.ogv" width="250px" id="video1" controls></video>
+        </div>
+        <div>
+            <video style="display: none" src="videos/timelapse.ogv" width="250px" id="video2" controls></video>
+        </div>
+        <div>
+        <video style="display: none" src="videos/fire.ogv" width="250px" id="video3" controls></video>
+        </div>
+        <div>
+            <video style="display: none" src="videos/fireworks.ogv" width="250px" id="video4" controls></video>
+        </div>
+        <script type="text/javascript">
+            var sources = ['video1', 'video2', 'video3','video4']
+            var videoSequencer = new VideoSequencer(sources);
+        </script>
+    </div>
+</body>
+</html>
