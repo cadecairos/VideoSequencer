@@ -19,21 +19,28 @@
             var metaDataIsLoaded = true;
             for (var i = 0; i < segments.length; i++) {
                 //console.log("READY STATE: " + i + " : " + segments[i].readyState);
-                if (segments[i].readyState < 3) {
+                if (isNaN(segments[i].duration) || segments[i].duration <= 0) {
                     metaDataIsLoaded = false;
                 }
                 //console.log(metaDataIsLoaded);
             }
             if (metaDataIsLoaded === true) {
-                that.duration = 0;
+                duration = 0;
                 clearInterval(getTotalDuration);
                 for (var i = 0; i < segments.length; i++) {
-                    that.duration += segments[i].duration;
+                    duration += segments[i].duration;
                     //console.log(segments[i].duration);
                 }
-                //console.log(that.duration);
+                console.log("duration: " + duration);
             }
         }, 50);
+
+        var submitBtn = document.getElementById("submit");
+        submitBtn.addEventListener("click", function () {
+            var tb = document.getElementById("timeToSeek");
+            return seek(toSeconds(tb.value));
+        }, false);
+
 
         segments[0].setAttribute("style", "display: inline");
         segments[0].play();
@@ -68,6 +75,19 @@
         }
     }
 
+    var swapTo = function (vid) {
+        for (var i = 0; i < segments.length; i++) {
+            if (segments[i] === vid) {
+                segments[i].setAttribute("style", "display: inline");
+                segments[i].play();
+            }
+            else if (segments[i].style.display === "inline") {
+                segments[i].pause();
+                segments[i].setAttribute("style", "display: none");
+            }
+        }
+    }
+
     this.play = function () {
 
     };
@@ -83,7 +103,22 @@
         }
     };
 
-    var seek = function () {
+    var seek = function (seconds) {
+        console.log(seconds + " : " + duration)
+        if (seconds > duration) { return }
+
+        for (var i = 0; i < segments.length; i++) {
+            if (segments[i].duration > seconds) {
+                console.log("currentTime (before): " + segments[i].currentTime);
+                swapTo(segments[i]);
+                segments[i].currentTime = seconds;
+                console.log("currentTime (after): " + segments[i].currentTime);
+                break;
+            } else {
+                seconds -= segments[i].duration;
+                console.log("seconds left: " + seconds + " : duration=" + segments[i].duration);
+            }
+        }
 
     };
 
