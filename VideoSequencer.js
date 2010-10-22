@@ -16,23 +16,17 @@
         }
 
         var getTotalDuration = setInterval(function () {
-            var metaDataIsLoaded = true;
             for (var i = 0; i < segments.length; i++) {
-                //console.log("READY STATE: " + i + " : " + segments[i].readyState);
                 if (isNaN(segments[i].duration) || segments[i].duration <= 0) {
-                    metaDataIsLoaded = false;
+                    return;
                 }
-                //console.log(metaDataIsLoaded);
             }
-            if (metaDataIsLoaded === true) {
-                duration = 0;
-                clearInterval(getTotalDuration);
-                for (var i = 0; i < segments.length; i++) {
-                    duration += segments[i].duration;
-                    //console.log(segments[i].duration);
-                }
-                console.log("duration: " + duration);
+            duration = 0;
+            clearInterval(getTotalDuration);
+            for (var i = 0; i < segments.length; i++) {
+                duration += segments[i].duration;
             }
+            console.log("duration: " + duration);
         }, 50);
 
         var submitBtn = document.getElementById("submit");
