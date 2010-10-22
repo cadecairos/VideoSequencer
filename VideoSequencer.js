@@ -16,22 +16,15 @@
         }
 
         var getTotalDuration = setInterval(function () {
-            var metaDataIsLoaded = true;
             for (var i = 0; i < segments.length; i++) {
-                //console.log("READY STATE: " + i + " : " + segments[i].readyState);
-                if (segments[i].readyState < 3) {
-                    metaDataIsLoaded = false;
+                if (isNaN(segments[i].duration) || segments[i].duration <= 0) {
+                    return;
                 }
-                //console.log(metaDataIsLoaded);
             }
-            if (metaDataIsLoaded === true) {
-                that.duration = 0;
-                clearInterval(getTotalDuration);
-                for (var i = 0; i < segments.length; i++) {
-                    that.duration += segments[i].duration;
-                    //console.log(segments[i].duration);
-                }
-                //console.log(that.duration);
+            that.duration = 0;
+            clearInterval(getTotalDuration);
+            for (var i = 0; i < segments.length; i++) {
+                that.duration += segments[i].duration;
             }
         }, 50);
 
@@ -79,7 +72,6 @@
     this.add = function (vid) {
         if (vid) {
             this.segments[this.segments.length] = vid;
-
         }
     };
 
