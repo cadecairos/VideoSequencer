@@ -96,18 +96,14 @@
     };
 
     var seek = function (seconds) {
-        //console.log(seconds + " : " + duration)
         if (seconds > duration || seconds < 0) { return }
 
         for (var i = 0; i < segments.length; i++) {
             if (segments[i].duration > seconds) {
-                //console.log("currentTime (before): " + segments[i].currentTime);
                 swapTo(i, seconds);
-                //console.log("currentTime (after): " + segments[i].currentTime);
                 break;
             } else {
                 seconds -= segments[i].duration;
-                //console.log("seconds left: " + seconds + " : duration=" + segments[i].duration);
             }
         }
 
