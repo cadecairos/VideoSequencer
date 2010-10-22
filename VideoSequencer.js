@@ -56,8 +56,8 @@
     /* video objects */
     var segments = [];
 
-    /* is a video playing*/
-    var isPlaying;
+    /* the currently playing video */
+    var currentPlayingVideo;
 
     /*
     ** functions
@@ -68,6 +68,7 @@
                 segments[i].setAttribute("style", "display: none");
                 if (segments[i + 1]) {
                     segments[i + 1].setAttribute("style", "display: inline");
+                    segments[i + 1].currentTime = 0;
                     segments[i + 1].play();
                     break;
                 }
@@ -75,13 +76,14 @@
         }
     }
 
-    var swapTo = function (vid) {
+    var swapTo = function (index, time) {
         for (var i = 0; i < segments.length; i++) {
-            if (segments[i] === vid) {
+            if (i === index) {
                 segments[i].setAttribute("style", "display: inline");
+                segments[i].currentTime = time;
                 segments[i].play();
             }
-            else if (segments[i].style.display === "inline") {
+            else {
                 segments[i].pause();
                 segments[i].setAttribute("style", "display: none");
             }
@@ -104,19 +106,18 @@
     };
 
     var seek = function (seconds) {
-        console.log(seconds + " : " + duration)
-        if (seconds > duration) { return }
+        //console.log(seconds + " : " + duration)
+        if (seconds > duration || seconds < 0) { return }
 
         for (var i = 0; i < segments.length; i++) {
             if (segments[i].duration > seconds) {
-                console.log("currentTime (before): " + segments[i].currentTime);
-                swapTo(segments[i]);
-                segments[i].currentTime = seconds;
-                console.log("currentTime (after): " + segments[i].currentTime);
+                //console.log("currentTime (before): " + segments[i].currentTime);
+                swapTo(i, seconds);
+                //console.log("currentTime (after): " + segments[i].currentTime);
                 break;
             } else {
                 seconds -= segments[i].duration;
-                console.log("seconds left: " + seconds + " : duration=" + segments[i].duration);
+                //console.log("seconds left: " + seconds + " : duration=" + segments[i].duration);
             }
         }
 
