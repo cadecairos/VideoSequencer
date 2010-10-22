@@ -3,6 +3,22 @@
 <head>
     <title>Test page</title>
     <script src="VideoSequencer.js"></script>
+    <script type="text/javascript">
+        var toSeconds = function () {
+            var textBox = document.getElementById("timeToSeek");
+            var time = textBox.value;
+            var t = time.split(":");
+            if (t.length === 1) {
+                return parseFloat(t[0], 10);
+            } else if (t.length === 2) {
+                return parseFloat(t[0], 10) + parseFloat(t[1] / 12, 10);
+            } else if (t.length === 3) {
+                return parseInt(t[0] * 60, 10) + parseFloat(t[1], 10) + parseFloat(t[2] / 12, 10);
+            } else if (t.length === 4) {
+                return parseInt(t[0] * 3600, 10) + parseInt(t[1] * 60, 10) + parseFloat(t[2], 10) + parseFloat(t[3] / 12, 10);
+            }
+        };
+    </script>
 </head>
 <body>
     <div>
@@ -18,10 +34,18 @@
         <div>
             <video style="display: none" src="http://matrix.senecac.on.ca/~cadecairos/VideoSequencer/Seek/videos/parkour.ogv" width="250px" id="video4" ></video>
         </div>
-        <script type="text/javascript">
-            var sources = ['video1', 'video2', 'video3','video4']
-            var videoSequencer = new VideoSequencer(sources);
-        </script>
+	<div>
+	    <br />
+            Enter time to seek to:<input id="timeToSeek" type="text" maxlength="11" />
+            <input id="submit" type="submit" value="seek" /><br />
+            (Acceptable formats are : HH:MM:SS:MM, MM:SS:MM, MM:SS, SS)
+        </div>
+        <div>
+            <script type="text/javascript">
+                var sources = ['video1', 'video2', 'video3', 'video4']
+                var videoSequencer = new VideoSequencer(sources);
+            </script>
+        </div>
     </div>
 </body>
 </html>

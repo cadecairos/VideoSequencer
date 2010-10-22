@@ -8,7 +8,6 @@
 
     var VideoSequencer = this.VideoSequencer = function (src) {
 
-        var that = this;
         for (var i = 0; i < src.length; i++) {
             vid = document.getElementById(src[i]);
             vid.addEventListener("ended", swap, false);
@@ -21,12 +20,18 @@
                     return;
                 }
             }
-            that.duration = 0;
+            duration = 0;
             clearInterval(getTotalDuration);
             for (var i = 0; i < segments.length; i++) {
-                that.duration += segments[i].duration;
+                duration += segments[i].duration;
             }
         }, 50);
+
+        var submitBtn = document.getElementById("submit");
+        submitBtn.addEventListener("click", function () {
+            var tb = document.getElementById("timeToSeek");
+            return seek(toSeconds(tb.value));
+        }, false);
 
         segments[0].setAttribute("style", "display: inline");
         segments[0].play();
@@ -42,8 +47,8 @@
     /* video objects */
     var segments = [];
 
-    /* is a video playing*/
-    var isPlaying;
+    /* the currently playing video */
+    var currentPlayingVideo;
 
     /*
     ** functions
@@ -54,9 +59,24 @@
                 segments[i].setAttribute("style", "display: none");
                 if (segments[i + 1]) {
                     segments[i + 1].setAttribute("style", "display: inline");
+                    segments[i + 1].currentTime = 0;
                     segments[i + 1].play();
                     break;
                 }
+            }
+        }
+    }
+
+    var swapTo = function (index, time) {
+        for (var i = 0; i < segments.length; i++) {
+            if (i === index) {
+                segments[i].setAttribute("style", "display: inline");
+                segments[i].currentTime = time;
+                segments[i].play();
+            }
+            else {
+                segments[i].pause();
+                segments[i].setAttribute("style", "display: none");
             }
         }
     }
@@ -75,7 +95,21 @@
         }
     };
 
-    var seek = function () {
+    var seek = function (seconds) {
+        //console.log(seconds + " : " + duration)
+        if (seconds > duration || seconds < 0) { return }
+
+        for (var i = 0; i < segments.length; i++) {
+            if (segments[i].duration > seconds) {
+                //console.log("currentTime (before): " + segments[i].currentTime);
+                swapTo(i, seconds);
+                //console.log("currentTime (after): " + segments[i].currentTime);
+                break;
+            } else {
+                seconds -= segments[i].duration;
+                //console.log("seconds left: " + seconds + " : duration=" + segments[i].duration);
+            }
+        }
 
     };
 
