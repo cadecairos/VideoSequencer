@@ -100,7 +100,7 @@
 
         for (var i = 0; i < segments.length; i++){
             if (segments[i].duration > seconds){
-                swapTo(i, seconds);
+                swapTo (i, seconds);
                 break;
             } else{
                 seconds -= segments[i].duration;
