@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<sources>
+  <vid src="http://matrix.senecac.on.ca/~cadecairos/VideoSequencer/Seek/videos/coolcar.ogv" length="15" sequenceNum="0" />
+  <vid src="http://matrix.senecac.on.ca/~cadecairos/VideoSequencer/Seek/videos/timelapse.ogv" length="12" sequenceNum="1" />
+  <vid src="http://matrix.senecac.on.ca/~cadecairos/VideoSequencer/Seek/videos/fire.ogv" length="28" sequenceNum="2" />
+  <vid src="http://matrix.senecac.on.ca/~cadecairos/VideoSequencer/Seek/videos/parkour.ogv" length="16" sequenceNum="3" />
+</sources>
