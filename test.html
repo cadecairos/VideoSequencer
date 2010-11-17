@@ -2,7 +2,8 @@
 <html>
 <head>
     <title>Test page</title>
-    <script src="VideoSequencer.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js" type="text/javascript"></script>
+    <script src="VideoSequencer.js" type="text/javascript"></script>
     <script type="text/javascript">
         var toSeconds = function () {
             var textBox = document.getElementById("timeToSeek");
@@ -22,28 +23,19 @@
 </head>
 <body>
     <div>
-        <div>
-            <video style="display: none" src="http://matrix.senecac.on.ca/~cadecairos/VideoSequencer/Seek/videos/coolcar.ogv" width="250px" id="video1" ></video>
+        <div id="videoDiv">
+            <video style="display: inline" src=""
+                width="250px" id="sequencer" segment-data="testSources.xml"></video>
         </div>
-        <div>
-            <video style="display: none" src="http://matrix.senecac.on.ca/~cadecairos/VideoSequencer/Seek/videos/timelapse.ogv" width="250px" id="video2" ></video>
-        </div>
-        <div>
-        <video style="display: none" src="http://matrix.senecac.on.ca/~cadecairos/VideoSequencer/Seek/videos/fire.ogv" width="250px" id="video3" ></video>
-        </div>
-        <div>
-            <video style="display: none" src="http://matrix.senecac.on.ca/~cadecairos/VideoSequencer/Seek/videos/parkour.ogv" width="250px" id="video4" ></video>
-        </div>
-	<div>
+        <!--<div>
 	    <br />
             Enter time to seek to:<input id="timeToSeek" type="text" maxlength="11" />
             <input id="submit" type="submit" value="seek" /><br />
             (Acceptable formats are : HH:MM:SS:MM, MM:SS:MM, MM:SS, SS)
-        </div>
+        </div>-->
         <div>
             <script type="text/javascript">
-                var sources = ['video1', 'video2', 'video3', 'video4']
-                var videoSequencer = new VideoSequencer(sources);
+                var videoSequencer = new VideoSequencer();
             </script>
         </div>
     </div>
