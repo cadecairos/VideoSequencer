@@ -161,7 +161,7 @@
       newVid.setAttribute("id", "active");
       newVid.addEventListener("timeupdate", function() { return that.update(); }, false );
     } else {
-    if(this.currentIndex >= this.segments.length) { this.currentIndex = 0; }
+      if(this.currentIndex >= this.segments.length) { this.currentIndex = 0; }
       newVid.setAttribute("src", this.segments[this.currentIndex + 1] ? this.segments[this.currentIndex + 1].src : this.segments[0].src);
       newVid.setAttribute("id", "inactive");
       newVid.setAttribute("style", "display: none");
