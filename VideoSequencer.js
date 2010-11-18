@@ -5,30 +5,23 @@
 */
 
 (function() {
-
 	var VideoSequencer = this.VideoSequencer = function() {
-	
 		/* save reference to self */
 		var self = this;
-		
 		/* video tags */
 		this.playingVideo;
 		this.nextVideo;
-	    
 		/* video data */
-	    this.segments = [];
+	  this.segments = [];
 		this.currentIndex = 0;
 		this.width;
 		this.height;
-	    
-	    /* Length of all segments */
-	    this.duration = 0;
-
-	    /* Current Time */
-	    this.currentTime = 0;
-
-	    /* Target Div for Video tags  */
-	    this.divTag;
+    /* Length of all segments */
+    this.duration = 0;
+    /* Current Time */
+    this.currentTime = 0;
+    /* Target Div for Video tags  */
+    this.divTag;
 		
 		var swapTo = function(index, time) {
 			for (var i = 0; i < segments.length; i++) {
@@ -46,7 +39,6 @@
 		
 		var seek = function(seconds) {
 			if (seconds > duration || seconds < 0) { return; }
-
 			for (var i = 0; i < segments.length; i++) {
 				if (segments[i].duration > seconds) {
 					swapTo(i, seconds);
@@ -58,11 +50,7 @@
 			}
 		};
 		
-        this.init();
-		this.add("http://matrix.senecac.on.ca/~cadecairos/VideoSequencer/videos/parkour.ogv",16,2);
-		for (var i = 0, l = this.segments.length; i < l; i ++) {
-			console.log(this.segments[i]);
-		}
+    this.init();
     };
 	
 	VideoSequencer.prototype.calculateDuration = function() {
@@ -167,30 +155,29 @@
 			newVid.setAttribute("id", "inactive");
 			newVid.setAttribute("style", "display: none");
 			newVid.autobuffer = true;
-			
 		}	
 		this.divTag.appendChild(newVid);
 		return newVid;
 	}
 	
-    VideoSequencer.prototype.play = function() {
-		this.playingVideo.Play();
-    };
+  VideoSequencer.prototype.play = function() {
+    this.playingVideo.Play();
+  };
 
-    VideoSequencer.prototype.pause = function() {
-		this.playingVideo.Pause();
-    };
+  VideoSequencer.prototype.pause = function() {
+    this.playingVideo.Pause();
+  };
 
-    VideoSequencer.prototype.add = function(src, len, index) {
-		var newSource = {};
-		newSource.src = src || "";
-		newSource.length = len || 0;
-		var l = this.segments.length;
-		this.segments.splice((len >= 0 && len < l ? len : l),0,{ src: src || "" , length : len || 0 })
-    };
-	
-	VideoSequencer.prototype.addEventListener = function(event, action) {
-			
-	};
+  VideoSequencer.prototype.add = function(src, len, index) {
+    var newSource = {};
+    newSource.src = src || "";
+    newSource.length = len || 0;
+    var l = this.segments.length;
+    this.segments.splice((len >= 0 && len < l ? len : l),0,{ src: src || "" , length : len || 0 })
+  };
+
+  VideoSequencer.prototype.addEventListener = function(event, action) {
+    
+  };
 	
 } ());
