@@ -176,6 +176,14 @@
     VideoSequencer.prototype.play = function() {
 		this.playingVideo.Play();
     };
+	
+	VideoSequencer.prototype.togglePlay = function() {
+		if (this.playingVideo.paused) {
+			this.playingVideo.play();
+		} else {
+			this.playingVideo.pause();
+		}
+	};
 
     VideoSequencer.prototype.pause = function() {
 		this.playingVideo.Pause();
