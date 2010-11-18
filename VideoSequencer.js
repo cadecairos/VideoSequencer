@@ -12,7 +12,7 @@
 		this.playingVideo;
 		this.nextVideo;
 		/* video data */
-	  this.segments = [];
+		this.segments = [];
 		this.currentIndex = 0;
 		this.width;
 		this.height;
@@ -51,7 +51,7 @@
 		};
 		
     this.init();
-    };
+	};
 	
 	VideoSequencer.prototype.calculateDuration = function() {
 		for (var i = 0, len = this.segments.length; i < len; i++) {
@@ -117,7 +117,7 @@
 				}
 			}
 			self.segments.push(aSource);
-		}
+		};
 		
 		var xml = xmlDoc.documentElement.childNodes;
 		for (var i = 0, xmlLen = xml.length; i < xmlLen; i++) {
@@ -158,7 +158,7 @@
 		}	
 		this.divTag.appendChild(newVid);
 		return newVid;
-	}
+	};
 	
   VideoSequencer.prototype.play = function() {
     this.playingVideo.Play();
