@@ -59,6 +59,10 @@
 		};
 		
         this.init();
+		this.add("http://matrix.senecac.on.ca/~cadecairos/VideoSequencer/videos/parkour.ogv",16,2);
+		for (var i = 0, l = this.segments.length; i < l; i ++) {
+			console.log(this.segments[i]);
+		}
     };
 	
 	VideoSequencer.prototype.calculateDuration = function() {
@@ -170,13 +174,18 @@
 	}
 	
     VideoSequencer.prototype.play = function() {
-
+		this.playingVideo.Play();
     };
 
     VideoSequencer.prototype.pause = function() {
-
+		this.playingVideo.Pause();
     };
 
-    VideoSequencer.prototype.add = function(vid) {
+    VideoSequencer.prototype.add = function(src, len, index) {
+		var newSource = {};
+		newSource.src = src || "";
+		newSource.length = len || 0;
+		var l = this.segments.length;
+		this.segments.splice((len >= 0 && len < l ? len : l),0,{ src: src || "" , length : len || 0 })
     };
 } ());
