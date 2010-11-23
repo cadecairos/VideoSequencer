@@ -1,105 +1,63 @@
 /* 
 ** VideoSequencer.js
 ** Created by: Christopher Decairos
-** Date: October 15, 2010
+** Date: Nov 22 , 2010
 */
 
 (function() {
 
   var VideoSequencer = this.VideoSequencer = function() {
 
-  /* save reference to self */
-  var self = this;
+    /* save reference to self */
+    var self = this;
+	
+	/* Event Listeners */
+    this.events = {};
+	
+     /* Current Time */
+    this.currentTime = 0;
+	
+	/* set up video data */
+    this.playingVideo = document.getElementById('active');
+    this.segments = [];
+    this.convertXML(this.getSegmentData(this.playingVideo.getAttribute('segment-data')).responseXML);
+    this.nextVideo;
+    this.segDtaPath = this.playingVideo.getAttribute("segment-data");
+    this.currentIndex = 0;
+    this.width = this.playingVideo.hasAttribute("width") ? this.playingVideo.getAttribute("width") : null;
+    this.height = this.playingVideo.hasAttribute("height") ? this.playingVideo.getAttribute("height") : null;
 
-  /* video tags */
-  this.playingVideo;
-  this.nextVideo;
+    /* Length of all segments */
+    this.duration = this.calculateDuration();
 
-  /* video data */
-  this.segments = [];
-  this.currentIndex = 0;
-  this.width;
-  this.height;
-
-  /* Length of all segments */
-  this.duration = 0;
-
-  /* Current Time */
-  this.currentTime = 0;
-
-  /* Target Div for Video tags  */
-  this.divTag;
-
-  var swapTo = function(index, time) {
-    for (var i = 0; i < segments.length; i++) {
-      if (i === index) {
-        segments[i].setAttribute("style", "display: inline");
-        segments[i].currentTime = time;
-        segments[i].play();
-      }
-      else {
-        segments[i].pause();
-        segments[i].setAttribute("style", "display: none");
-      }
-    }
-  };
-
-  var seek = function(seconds) {
-    if (seconds > duration || seconds < 0) { return; }
-    for (var i = 0; i < segments.length; i++) {
-      if (segments[i].duration > seconds) {
-        swapTo(i, seconds);
-		break;
-      }
-      else {
-        seconds -= segments[i].duration;
-      }
-    }
-  };
-
-  this.init();
-  //this.add("http://matrix.senecac.on.ca/~cadecairos/VideoSequencer/videos/parkour.ogv",16,2);
-  //for (var i = 0, l = this.segments.length; i < l; i ++) {
-  //  console.log(this.segments[i]);
-  //}
+    /* Target Div for Video tags  */
+    this.divTag = document.getElementById("videoDiv");
+    this.divTag.removeChild(this.playingVideo);
+  
+    //delete this.playingVideo;
+    this.playingVideo = this.createVideoTag(this.width,this.height,true, false);
+    this.addEventListener("timeupdate", function() { return self.update(); });
+    this.nextVideo = self.createVideoTag(this.width,this.height,true, true);
   };
 
   VideoSequencer.prototype.calculateDuration = function() {
-    for (var i = 0, len = this.segments.length; i < len; i++) {
-      this.duration += parseInt(this.segments[i].length);
-    }			
+    var dur = 0;
+	for (var i = 0, len = this.segments.length; i < len; i++) {
+      dur += parseInt(this.segments[i].length);
+    }		
+    return dur;
   };
 
   VideoSequencer.prototype.swap = function() {
     var that = this;
     this.divTag.removeChild(this.playingVideo);
-    delete this.playingVideo;
     this.playingVideo = this.nextVideo;
-    delete this.nextVideo;
     this.playingVideo.setAttribute("style", "display: inline");
     this.playingVideo.setAttribute("id", "active");
-    this.playingVideo.addEventListener("timeupdate", function() { return that.update(); }, false );
+    this.addEventListener("timeupdate", function() { return that.update(); });
     this.playingVideo.play();		
     this.nextVideo = this.createVideoTag(this.width,this.height,true, true);
   }
-
-  VideoSequencer.prototype.init = function() {
-    this.playingVideo = document.getElementById('active');
-    this.segDta = this.playingVideo.getAttribute("segment-data");
-    this.width = this.playingVideo.hasAttribute("width") ? this.playingVideo.getAttribute("width") : null;
-    this.height = this.playingVideo.hasAttribute("height") ? this.playingVideo.getAttribute("height") : null;
-    this.convertXML(this.getSegmentData(this.playingVideo.getAttribute('segment-data')).responseXML);
-    this.calculateDuration();
-    this.divTag = document.getElementById("videoDiv");
-    this.updateVideos();
-  };
-
-  VideoSequencer.prototype.updateVideos = function() {
-    this.divTag.removeChild(this.playingVideo);
-    delete this.playingVideo;
-    this.playingVideo = this.createVideoTag(this.width,this.height,true, false);
-    this.nextVideo = this.createVideoTag(this.width,this.height,true, true);
- };
 
   VideoSequencer.prototype.getSegmentData = function(segDataFile) {
     var xhttp = new XMLHttpRequest();
@@ -154,12 +112,11 @@
     if (width != null)  newVid.setAttribute("width", width);
     if (height != null) newVid.setAttribute("height", height);
     if (controls) newVid.setAttribute("controls",""); 
-    newVid.setAttribute("segment-data", this.segDta);
+    newVid.setAttribute("segment-data", this.segDtaPath);
     if (!hidden) {
       newVid.setAttribute("src", this.segments[this.currentIndex].src);
       newVid.setAttribute("style", "display: inline");
       newVid.setAttribute("id", "active");
-      newVid.addEventListener("timeupdate", function() { return that.update(); }, false );
     } else {
       if(this.currentIndex >= this.segments.length) { this.currentIndex = 0; }
       newVid.setAttribute("src", this.segments[this.currentIndex + 1] ? this.segments[this.currentIndex + 1].src : this.segments[0].src);
@@ -195,8 +152,45 @@
     this.segments.splice((len >= 0 && len < l ? len : l),0,{ src: src || "" , length : len || 0 })
   };
 
-  VideoSequencer.prototype.addEventListener = function(event, action) {
-    
+  VideoSequencer.prototype.addEventListener = function(event, callback) {
+    var callbackExists = false;
+    var queue = this.events[event] = this.events[event] || [];
+	for (var i = 0, l = queue.length; i < l; i++) {
+		if (event === queue[i]) {
+			callbackExists = true
+			break;
+		}
+	}
+	if (!callbackExists) { 
+	  queue.push(callback);
+	  this.addListenerToVideo(event); 
+	}
+	
   };
+  
+  VideoSequencer.prototype.addListenerToVideo = function(listener) {
+	var that = this;
+    if ( this.events[listener]) {
+		for (var i=0, l = this.events[listener].length; i < l; i++) {
+			this.playingVideo.addEventListener(listener, that.events[listener][i], false);
+		}
+		return true;
+	}
+	return false;
+	
+  };
+  
+  VideoSequencer.prototype.removeEventListener = function(event, callback) {
+    for (var i = 0, len = this.events.length;i<len;i++) {
+	  if (this.events[event] === callback) {
+	    return this.events.splice(i,1);
+	  }
+	}
+	return false;
+  };
+  
+  //VideoSequencer.prototype.seekTo = function(seconds) {
+	
+  //}
 	
 } ());
