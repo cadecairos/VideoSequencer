@@ -11,13 +11,13 @@
     /* save reference to self */
     var self = this;
 	
-	/* Event Listeners */
+    /* Event Listeners */
     this.events = {};
-	
+
      /* Current Time */
     this.currentTime = 0;
 	
-	/* set up video data */
+    /* set up video data */
     this.playingVideo = document.getElementById('active');
     this.segments = [];
     this.convertXML(this.getSegmentData(this.playingVideo.getAttribute('segment-data')).responseXML);
@@ -33,8 +33,7 @@
     /* Target Div for Video tags  */
     this.divTag = document.getElementById("videoDiv");
     this.divTag.removeChild(this.playingVideo);
-  
-    //delete this.playingVideo;
+ 
     this.playingVideo = this.createVideoTag(this.width,this.height,true, false);
     this.addEventListener("timeupdate", function() { return self.update(); });
     this.nextVideo = self.createVideoTag(this.width,this.height,true, true);
@@ -42,7 +41,7 @@
 
   VideoSequencer.prototype.calculateDuration = function() {
     var dur = 0;
-	for (var i = 0, len = this.segments.length; i < len; i++) {
+    for (var i = 0, len = this.segments.length; i < len; i++) {
       dur += parseInt(this.segments[i].length);
     }		
     return dur;
@@ -54,7 +53,7 @@
     this.playingVideo = this.nextVideo;
     this.playingVideo.setAttribute("style", "display: inline");
     this.playingVideo.setAttribute("id", "active");
-    this.addEventListener("timeupdate", function() { return that.update(); });
+    this.addListenersToCurrentVideo("timeupdate");
     this.playingVideo.play();		
     this.nextVideo = this.createVideoTag(this.width,this.height,true, true);
   }
@@ -155,42 +154,37 @@
   VideoSequencer.prototype.addEventListener = function(event, callback) {
     var callbackExists = false;
     var queue = this.events[event] = this.events[event] || [];
-	for (var i = 0, l = queue.length; i < l; i++) {
-		if (event === queue[i]) {
-			callbackExists = true
-			break;
-		}
-	}
-	if (!callbackExists) { 
-	  queue.push(callback);
-	  this.addListenerToVideo(event); 
-	}
-	
+    for (var i = 0, l = queue.length; i < l; i++) {
+      if (event === queue[i]) {
+        callbackExists = true
+        break;
+      }
+    }
+    if (!callbackExists) { 
+      queue.push(callback);
+      this.playingVideo.addEventListener(event, callback, false); 
+    }
   };
   
-  VideoSequencer.prototype.addListenerToVideo = function(listener) {
-	var that = this;
+  VideoSequencer.prototype.addListenersToCurrentVideo = function(listener) {
+    var that = this;
     if ( this.events[listener]) {
-		for (var i=0, l = this.events[listener].length; i < l; i++) {
-			this.playingVideo.addEventListener(listener, that.events[listener][i], false);
-		}
-		return true;
-	}
-	return false;
-	
+      for (var i=0, l = this.events[listener].length; i < l; i++) {
+        this.playingVideo.addEventListener(listener, that.events[listener][i], false);
+      }
+    }
   };
   
-  VideoSequencer.prototype.removeEventListener = function(event, callback) {
-    for (var i = 0, len = this.events.length;i<len;i++) {
-	  if (this.events[event] === callback) {
-	    return this.events.splice(i,1);
-	  }
-	}
-	return false;
+  VideoSequencer.prototype.removeEventListener = function(event, callback, useCapture) {
+    var queue = this.events[event];
+    if (queue) {
+      for (var i = 0, len = queue.length; i < len; i++) {
+        if (queue[i] === callback) {
+          this.playingVideo.removeEventListener (event, queue[i], useCapture);
+          queue.splice(i,1);
+        }
+      }
+    }
   };
-  
-  //VideoSequencer.prototype.seekTo = function(seconds) {
-	
-  //}
-	
+
 } ());
