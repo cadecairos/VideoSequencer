@@ -47,12 +47,16 @@
     return dur;
   };
 
-  VideoSequencer.prototype.swap = function() {
+  VideoSequencer.prototype.swap = function(seeking) {
     var that = this;
     this.divTag.removeChild(this.playingVideo);
-    this.playingVideo = this.nextVideo;
-    this.playingVideo.setAttribute("style", "display: inline");
-    this.playingVideo.setAttribute("id", "active");
+    if (!seeking) {
+      this.playingVideo = this.nextVideo;
+      this.playingVideo.setAttribute("style", "display: inline");
+      this.playingVideo.setAttribute("id", "active");
+    } else {
+      this.playingVideo = this.createVideoTag(this.width, this.height, true, false);
+    }
     this.addListenersToCurrentVideo("timeupdate");
     this.playingVideo.play();		
     this.nextVideo = this.createVideoTag(this.width,this.height,true, true);
@@ -101,7 +105,7 @@
     var vid = this.playingVideo;
     if (vid.currentTime >= vid.duration - 0.05 && vid.readyState >= 3){
       this.currentIndex+=1;
-      this.swap();
+      this.swap(false);
     }
   };
 
@@ -121,7 +125,7 @@
       newVid.setAttribute("src", this.segments[this.currentIndex + 1] ? this.segments[this.currentIndex + 1].src : this.segments[0].src);
       newVid.setAttribute("id", "inactive");
       newVid.setAttribute("style", "display: none");
-      newVid.autobuffer = true;
+      newVid.setAttribute("preload", "auto");
     }	
     this.divTag.appendChild(newVid);
     return newVid;
@@ -187,4 +191,31 @@
     }
   };
 
+  VideoSequencer.prototype.seek = function(time) {
+    self = this;
+    var duration = this.duration;
+    if (!(time >= 0 && time <= duration)) { return; }
+    segments = this.segments;
+    for (var i = 0, l = segments.length; i < l; i++) {
+        segLen = segments[i].length;
+        if (time > segLen) {
+          time = time - segLen;
+          continue;
+        }
+		console.log("index: " + i, " :: seglen: " + segLen);
+		console.log(this.currentIndex + " : " + i);
+		if (!(this.currentIndex == i)) {
+          this.currentIndex = i;
+          this.swap(true);
+        }  
+        var seekWhenReady = setInterval( function (t) {
+          if (self.playingVideo.readyState == 4) {
+            self.playingVideo.currentTime = t;
+			console.log("time: " + self.playingVideo.currentTime);
+            clearInterval(seekWhenReady);
+          }
+        },1);
+		break;
+    }
+  };	
 } ());

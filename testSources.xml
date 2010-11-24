@@ -1,18 +1,18 @@
 ﻿<sources>
   <vid>
-    <source>http://matrix.senecac.on.ca/~cadecairos/VideoSequencer/videos/coolcar.ogv</source>
-    <length>15</length>
-  </vid>
-  <vid>
-    <source>http://matrix.senecac.on.ca/~cadecairos/VideoSequencer/videos/timelapse.ogv</source>
+    <source>http://matrix.senecac.on.ca/~cadecairos/VideoSequencer/videos/parkour.ogv</source>
     <length>16</length>
   </vid>
   <vid>
-    <source>http://matrix.senecac.on.ca/~cadecairos/VideoSequencer/videos/coolcar.ogv</source>
-    <length>15</length>
+    <source>http://matrix.senecac.on.ca/~cadecairos/VideoSequencer/videos/timelapse.ogv</source>
+    <length>12</length>
+  </vid>
+  <vid>
+    <source>http://matrix.senecac.on.ca/~cadecairos/VideoSequencer/videos/parkour.ogv</source>
+    <length>16</length>
   </vid>
   <vid>
     <source>http://matrix.senecac.on.ca/~cadecairos/VideoSequencer/videos/timelapse.ogv</source>
-    <length>16</length>
+    <length>12</length>
   </vid>
 </sources>

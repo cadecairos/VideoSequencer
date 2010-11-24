@@ -25,12 +25,12 @@
       <div id="videoDiv">
         <video width="300" height="300" id="active" segment-data="testSources.xml"></video>
       </div>
-      <!--<div>
+      <div>
       <br />
       Enter time to seek to:<input id="timeToSeek" type="text" maxlength="11" />
-      <input id="submit" type="submit" value="seek" /><br />
+      <input id="submit" type="submit" onclick="videoSequencer.seek(toSeconds())" value="seek" /><br />
       (Acceptable formats are : HH:MM:SS:MM, MM:SS:MM, MM:SS, SS)
-      </div>-->
+      </div>
       <div>
         <script type="text/javascript">
           var videoSequencer = new VideoSequencer();
