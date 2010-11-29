@@ -152,7 +152,7 @@
     newSource.src = src || "";
     newSource.length = len || 0;
     var l = this.segments.length;
-    this.segments.splice((len >= 0 && len < l ? len : l),0,{ src: src || "" , length : len || 0 })
+    this.segments.splice((len >= 0 && len < l ? len : l),0,{ src: src || "" , length : len || 0 });
   };
 
   VideoSequencer.prototype.addEventListener = function(event, callback) {
