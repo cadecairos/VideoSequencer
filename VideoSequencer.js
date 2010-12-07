@@ -48,7 +48,6 @@
   };
 
   VideoSequencer.prototype.swap = function(seeking) {
-    var that = this;
     this.divTag.removeChild(this.playingVideo);
     if (!seeking) {
       this.playingVideo = this.nextVideo;
@@ -56,9 +55,10 @@
       this.playingVideo.setAttribute("id", "active");
     } else {
       this.playingVideo = this.createVideoTag(this.width, this.height, true, false);
+	  this.divTag.removeChild(this.nextVideo);
     }
     this.addListenersToCurrentVideo("timeupdate");
-    this.playingVideo.play();		
+    //this.playingVideo.play();		
     this.nextVideo = this.createVideoTag(this.width,this.height,true, true);
   }
 
@@ -103,9 +103,10 @@
 
   VideoSequencer.prototype.update = function() {
     var vid = this.playingVideo;
-    if (vid.currentTime >= vid.duration - 0.05 && vid.readyState >= 3){
+    if (vid.currentTime >= vid.duration - 0.05){
       this.currentIndex+=1;
       this.swap(false);
+	  this.play();
     }
   };
 
@@ -132,7 +133,7 @@
   };
 
   VideoSequencer.prototype.play = function() {
-    this.playingVideo.Play();
+    this.playingVideo.play();
   };
 
   VideoSequencer.prototype.togglePlay = function() {
@@ -144,7 +145,7 @@
   };
 
   VideoSequencer.prototype.pause = function() {
-    this.playingVideo.Pause();
+    this.playingVideo.pause();
   };
 
   VideoSequencer.prototype.add = function(src, len, index) {
@@ -202,19 +203,21 @@
           time = time - segLen;
           continue;
         }
-		console.log("index: " + i, " :: seglen: " + segLen);
-		console.log(this.currentIndex + " : " + i);
 		if (!(this.currentIndex == i)) {
           this.currentIndex = i;
           this.swap(true);
-        }  
-        var seekWhenReady = setInterval( function (t) {
-          if (self.playingVideo.readyState == 4) {
+        } 
+		if (!this.playingVideo.paused) this.pause();
+		
+		 var seekIntoVid = function (t) {
+		  if (self.playingVideo.readyState >= 2) {
             self.playingVideo.currentTime = t;
-			console.log("time: " + self.playingVideo.currentTime);
+            self.play();
             clearInterval(seekWhenReady);
           }
-        },1);
+        };
+		
+        var seekWhenReady = setInterval( function(){ seekIntoVid(time)} ,50);
 		break;
     }
   };	
