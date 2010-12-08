@@ -70,6 +70,7 @@
         pauseButton.style.display = "inline";
         playButton.style.display = "none";
       };
+      
       var updateSeekable = function(){
         var endVal = parent.playingVideo.seekable && parent.playingVideo.seekable.length ? parent.playingVideo.seekable.end() : 0;
         //FF has a buffered event
@@ -80,25 +81,28 @@
           }
         }*/
         buffer.style.width = (100 / (duration || 1) * endVal) + '%';
-      }
+      };
+      
       var updateEllapsedTime = function(){
         var totalTimeElapsed = 0;
-        var segments = seq.segments;
-        for (var i = 0, len = segments.length; i < seq.currentIndex; i++)
+        var segments = parent.segments;
+        for (var i = 0, len = segments.length; i < parent.currentIndex; i++)
         {
           totalTimeElapsed += parseInt(segments[i].length);
-        }
+        };
+        
         totalTimeElapsed += parent.playingVideo.currentTime;
         var c = totalDuration.style.width.split("p")[0];
         ellapsedTime.style.left = ( ( totalTimeElapsed / duration  ) * parseInt(c)) +"px";
       }
       this.draw = function() {
-        seq.addEventListener('timeupdate', updateEllapsedTime, false);
+        var p = parent;
+        p.addEventListener('timeupdate', updateEllapsedTime, false);
         //buffer bar for progress
-        seq.addEventListener('progress', updateSeekable, false);
+        p.addEventListener('progress', updateSeekable, false);
         //Firefox in its video element that causes the video.seekable.end() value not to be the same as the duration. 
         //To work around this issue, we can also listen for the durationchange event
-        seq.addEventListener('durationchange', updateSeekable, false);
+        p.addEventListener('durationchange', updateSeekable, false);
     
         playButton.title = "play";
         playButton.value = "play";
@@ -121,8 +125,14 @@
         ellapsedTime.setAttribute("style","width:3px;height:15px; position:absolute; background-color: black ;");
 
         totalDuration.title ="total";
-        totalDuration.setAttribute("style","width:"+ (seq.timeDiv.width - 50) +"px;height:15px; position:absolute; border-style:solid;border-width:3px;position: absolute; border-radius:10px; -moz-border-radius: 10px;-webkit-border-radius: 10px;");
-    
+        totalDuration.setAttribute("style","width:"+ (p.timeDiv.width - 50) +"px;height:15px; position:absolute; border-style:solid;border-width:3px;position: absolute; border-radius:10px; -moz-border-radius: 10px;-webkit-border-radius: 10px;");
+        totalDuration.addEventListener("mousedown", function(e){         
+          var x = e.screenX;
+          var w = parseInt(totalDuration.style.width.split("p")[0]);
+          var seekTime = ( ( (x - 50) / w ) * duration );
+          p.seek(seekTime);
+        }, false);
+        
         //add buffered and ellapsedTime to the total duration div so they stay on top of each other
         totalDuration.appendChild(buffer);
         totalDuration.appendChild(ellapsedTime);
@@ -136,12 +146,11 @@
         container.appendChild(pauseButton);
         container.appendChild(barContainer);
       
-        seq.timeDiv.tag.appendChild(container);
+        parent.timeDiv.tag.appendChild(container);
         play();
       }   
     }
     )(this);
-    //this.timeBar = new Timebar(this);
     this.timeBar.draw();
   };
 
@@ -216,7 +225,7 @@
   };
 
   VideoSequencer.prototype.createVideoTag = function(width, height, controls, hidden) {
-    var that = this;
+    
     var newVid = document.createElement("video");
     if (width != null)  newVid.setAttribute("width", width);
     if (height != null) newVid.setAttribute("height", height);
