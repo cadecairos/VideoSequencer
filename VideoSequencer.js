@@ -151,7 +151,7 @@
     this.segments.splice((len >= 0 && len < l ? len : l),0,{ src: src || "" , length : len || 0 })
   };
 
-  VideoSequencer.prototype.addEventListener = function(event, callback) {
+  VideoSequencer.prototype.addEventListener = function(event, callback, useCapture) {
     var callbackExists = false;
     var queue = this.events[event] = this.events[event] || [];
     for (var i = 0, l = queue.length; i < l; i++) {
@@ -162,7 +162,7 @@
     }
     if (!callbackExists) { 
       queue.push(callback);
-      this.playingVideo.addEventListener(event, callback, false); 
+      this.playingVideo.addEventListener(event, callback, useCapture); 
     }
   };
   
