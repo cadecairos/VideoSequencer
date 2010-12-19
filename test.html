@@ -3,14 +3,43 @@
   <head>
     <title> VideoSequencer.js Test page</title>
     <script src="VideoSequencer.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      var aFunc = function() { 
+        alert("You have paused the video!");
+      };
+    
+      var addAListener = function(){
+        videoSequencer.addEventListener ("pause", aFunc ,false);
+      };
+      
+      var removeAListener = function() {
+        videoSequencer.removeEventListener ("pause", aFunc, false);
+      };
+    </script>
   </head>
   <body>
-    <div>
+    <div style="text-align: center">
+      <h2>VideoSequencer 0.3 release demo</h2>
+      <p>Now featuring: 
+      <br />* Soda.js interface! This timebar displays the current position of playback in the sequence!
+      <br />* Event handling!</p>
+    </div>
+    <div style="margin-left: 38%">
       <div id="videoDiv">
         <video width="300" id="active" segment-data="testSources.xml"></video>
       </div>
-      <div id="controlDiv" height="10" width="300">  </div>
+      <div id="controlDiv" height="10" width="300">  
       </div>
+    </div>
+    <br />
+    <div style="text-align: center">
+    <h3>Event Handling example</h3>
+       Click the add button below to add a listener to the sequencer (this example listener is pause, and creates an alert window)<br />
+       Click the delete button below to remove the listener from the sequencer<br />
+       ** Notice that the listener carries from video to video! (VideoSequencer can handle multiple events with multiple callbacks, and applies them all to the next video in the sequence before it starts playing!)<br />
+      <button type="button" onClick="addAListener()">Add Listener</button><br />
+      <button type="button" onClick="removeAListener()">Remove Listener</button>
+    </div>
         <script type="text/javascript">
           var videoSequencer = new VideoSequencer();
         </script>

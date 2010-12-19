@@ -128,14 +128,16 @@
         totalDuration.title ="total";
         totalDuration.setAttribute("style","width:"+ (p.timeDiv.width - 50) +"px;height:15px; position:absolute; border-style:solid;border-width:3px;position: absolute; border-radius:10px; -moz-border-radius: 10px;-webkit-border-radius: 10px;");
         
-        totalDuration.addEventListener("click", function(e){          
-          var x = e.screenX;
-          var w = parseInt(totalDuration.style.width.split("p")[0]);
-          var seekTime = ( ( (x - 54) / w ) * duration );
-          p.seek(seekTime);
-          pauseButton.style.display = "inline";
-          playButton.style.display = "none";
-        }, false);
+        //seek disabled, it is not functioning properly
+        //
+        // totalDuration.addEventListener("click", function(e){          
+          // var x = e.screenX;
+          // var w = parseInt(totalDuration.style.width.split("p")[0]);
+          // var seekTime = ( ( (x - 54) / w ) * duration );
+          // p.seek(seekTime);
+          // pauseButton.style.display = "inline";
+          // playButton.style.display = "none";
+        // }, false);
         
         //add buffered and ellapsedTime to the total duration div so they stay on top of each other
         totalDuration.appendChild(buffer);
