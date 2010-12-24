@@ -1,4 +1,4 @@
-VideoSequencer v.0.2
+VideoSequencer v.0.3
 
 ///////////////////////////////////////////////////////////////////////////////////
 The MIT License
@@ -28,13 +28,4 @@ Original Author: Christopher DeCairos
 
 Description: VideoSequencer is a Javascript library that provides methods for 
 developers to seamlessly sequence videos one after another.
-
-Methods:
-VideoSequencer(src) - constructor that creates a VideoSequencer using the specified sources.
-play() - not implemented
-pause() - not implemented
-add(vid) - adds a video to the segments[] array
-seek(seconds) - seeks to the point in the video specified by seconds
-swap() - called when a video ends, hides the previously playing video and makes the next visible and play.
-swapTo(index) - called when seeking, to display the video that is playing at the required time.
 
